@@ -1,11 +1,25 @@
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-
+import { Client, Account } from "appwrite";
 function App() {
   const [count, setCount] = useState(0)
+   useEffect(() => {
+    const client = new Client();
+    // 故意不寫 setEndpoint() 來測試看看會不會錯
+    client.setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
 
+    const account = new Account(client);
+
+    account.get()
+      .then((res) => {
+        console.log("✅ 成功取得使用者：", res);
+      })
+      .catch((err) => {
+        console.error("❌ 發生錯誤：", err);
+      });
+  }, []);
   return (
     <>
       <h1 class="text-3xl font-bold underline">

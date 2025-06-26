@@ -56,3 +56,7 @@ export class AuthService{
 const authService = new AuthService()
     
 export default authService
+
+const account = new Account(client);
+
+account.get().then(console.log).catch(console.error);
