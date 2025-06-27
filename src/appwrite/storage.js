@@ -41,6 +41,9 @@ export class StorageService {
             fileId
         ).href
     }
-
 }
+
+const storageservice =new StorageService()
+
+export default storageservice;
 
