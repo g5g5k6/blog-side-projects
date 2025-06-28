@@ -3,11 +3,12 @@ import './index.css'
 import App from './App.jsx'
 import {createBrowserRouter, RouterProvider} from "react-router-dom"
 import { Provider } from 'react-redux'
-import store from "./store/store.js"
+import store from './store/index.js'
+import ReactDOM from 'react-dom/client'
 
 import Home from "./pages/Home.jsx"
 import Login from "./pages/Login.jsx"
-import AuthLayout from "./components/AuthLayout.jsx"
+import Protected from "./components/AuthLayout.jsx"
 import Signup from "./pages/Signup.jsx"
 import AllPost from './pages/AllPost.jsx'
 import AddPost from "./pages/AddPost.jsx"
@@ -25,9 +26,9 @@ const router = createBrowserRouter([{
     {
       path:"/login",
       element:(
-        <AuthLayout authentication={false}>
+        <Protected authentication={false}>
           <Login /> 
-        </AuthLayout>
+        </Protected>
       )
     },
     {
