@@ -7,7 +7,7 @@ import Select from "../Select"
 import databaseSerice from "../../appwrite/database.js"
 import storageSerice from "../../appwrite/storage.js"
 import {useSelector } from "react-redux"
-import {data, Form, useNavigate} from "react-router-dom"
+import { useNavigate} from "react-router-dom"
 
 function PostForm({post}) {
     const {register, handleSubmit, watch, setValue, control, getValues} = useForm({
