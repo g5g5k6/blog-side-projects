@@ -1,6 +1,8 @@
 import conf from "../config/config";
 import { Client, Account, ID } from "appwrite";
-
+console.log(import.meta.env)
+console.log(conf.appwriteUrl);
+console.log("appwriteUrl:", import.meta.env.VITE_APPWRITE_URL);
 export class AuthService{
     client = new Client();
     account;
@@ -10,7 +12,9 @@ export class AuthService{
         this.account = new Account(this.client);
     }
 
-    async createAccount(email, password, name){
+    async createAccount({email, password, name}){
+        console.log("email:", email)
+        console.log("password:", password)
         try {
             const userAccount =await this.account.create(ID.unique(), email, password, name)
             if (userAccount){

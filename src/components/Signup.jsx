@@ -16,6 +16,8 @@ function Signup() {
     
     const create = async (data) => {
         setError("")
+
+        console.log("password:", data.password)
         try {
             const userData = await authService.createAccount(data)
             if (userData) {
@@ -79,3 +81,5 @@ function Signup() {
         </div>
     )
 }
+
+export default Signup
