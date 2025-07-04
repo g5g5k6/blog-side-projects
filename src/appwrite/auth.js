@@ -1,5 +1,7 @@
 import conf from "../config/config";
 import { Client, Account, ID } from "appwrite";
+import  getFriendlyErrorMessage  from "./errorHandler"
+
 console.log(import.meta.env)
 console.log(conf.appwriteUrl);
 console.log("appwriteUrl:", import.meta.env.VITE_APPWRITE_URL);
@@ -26,7 +28,7 @@ export class AuthService{
             }
         } catch (error) {
             console.log("Appwrite service :: createAccount:: ", error);
-            throw error
+            throw getFriendlyErrorMessage(error)
         }
     }
 
