@@ -1,17 +1,34 @@
 
-# side-projects
-side-projects
+# blog-side-project 
 
-# React + Vite
+> 使用 React + Vite + Tailwind CSS + Appwrite 打造的簡易部落格系統，具備註冊、登入、發文、刪除、圖片上傳功能。
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
+##  功能
 
-Currently, two official plugins are available:
+- 使用者註冊與登入（基於 Appwrite Auth）
+- 發布與刪除貼文（支援圖片）
+- 圖片儲存整合 Appwrite Storage
+- React 建構的現代化前端介面
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
+## 系統展示
 
-## Expanding the ESLint configuration
+<img src="" width="700" alt="demo">
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+##  資料流程說明
 
+1. 
+
+
+
+
+---
+##  快速開始
+保護個人 Appwrite憑證，未隨專案上傳 .env。
+不過仍可完整瀏覽本專案的資料流、元件架構與畫面互動邏輯，理解整體技術設計流程。
+若需本地完整體驗，請自行至Appwrite官網申請帳號並參考官方文件。
+
+```bash
+npm run dev
