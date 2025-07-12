@@ -7,7 +7,7 @@ export class StorageService {
     constructor() {
         this.client.setEndpoint(conf.appwriteUrl)
         .setProject(conf.appwriteProjectId)
-        const bucket = new Storage(this.client);
+        this.bucket = new Storage(this.client);
     }
 
     async uploadFile(file) {
