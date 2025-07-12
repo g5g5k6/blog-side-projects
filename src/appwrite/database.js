@@ -30,7 +30,7 @@ export class DatabaseService {
         }
     }
 
-    async createPost(slug,{title, content, featuredImage, status, userId}){
+    async createPost({title, slug, content, featuredImage, status, userId}){
         try {
             await this.databases.createDocument(
                 conf.appwriteDatabaseId,

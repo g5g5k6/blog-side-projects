@@ -21,7 +21,9 @@ function PostForm({post}) {
     })
     
     const navigate = useNavigate()
-    const userData =useSelector((state) => state.auth.userDate)
+    const userData =useSelector((state) => state.auth.userData)
+    const auth = useSelector(state => state.auth);
+
     const submit = async(data) => {
         if (post) {
             const file = data.image[0] ? await storageSerice.uploadFile(data.image[0]) : null
@@ -40,6 +42,7 @@ function PostForm({post}) {
             if (file) {
                 const fileId = file.$id
                 data.featuredImage = fileId
+                console.log('userData:', userData,file);
                 const dbPost = await databaseSerice.createPost({...data, userId: userData.$id})
 
                 if (dbPost) {
