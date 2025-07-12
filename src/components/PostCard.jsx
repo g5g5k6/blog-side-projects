@@ -1,10 +1,23 @@
-import React from 'react'
+import React , { useEffect, useState }from 'react'
 import {Link} from "react-router-dom"
 import appwriteService from "../appwrite/storage.js"
 
-function PostCard({
-    $id, title, featuredImage
-}) {
+function PostCard({ $id, title, featuredImage}) {
+  const [imgUrl, setImgUrl] = useState("");
+
+  // useEffect(() => {
+  //   async function fetchUrl() {
+  //   if (!featuredImage) {
+  //     setImgUrl("");
+  //     return;
+  //   }
+  //     const url = await appwriteService.getFilePreview(featuredImage);
+  //     console.log("imgUrl:", url);
+  //     setImgUrl(url);
+  //   }
+  //   fetchUrl();
+
+  // }, [featuredImage]);
   return (
     <Link to={`/post/${$id}`}>
         <div

@@ -35,12 +35,18 @@ export class StorageService {
         }
     }
 
-    getFilePreview(fileId){
-        return this.bucket.getFilePreview(
-            conf.appwriteBucketId,
-            fileId
-        ).href
+    getFilePreview(fileId) {
+    if (!fileId) return "";
+    try {
+        const url=this.bucket.getFileView(conf.appwriteBucketId, fileId);
+        console.log("imgUrl:", url);
+        return url
+    } catch (error) {
+        console.error('getFilePreview error:', error);
+        return "";
     }
+    }
+
 
 }
 
