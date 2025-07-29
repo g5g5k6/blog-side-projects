@@ -1,8 +1,11 @@
 import React from 'react'
 import {Link} from "react-router-dom"
 import Logo from "../Logo"
+import { useTranslation } from '../../hooks/useTranslation'
 
 function Footer() {
+  const { t } = useTranslation();
+  
   return (
     <section className="relative overflow-hidden py-10 bg-gray-400 border border-t-2 border-t-black">
             <div className="relative z-10 mx-auto max-w-7xl px-4">
@@ -14,7 +17,10 @@ function Footer() {
                             </div>
                             <div>
                                 <p className="text-sm text-gray-600">
-                                    &copy; Copyright 2023. All Rights Reserved by DevUI.
+                                    {t('footer.copyright')}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    {t('footer.builtWith')}
                                 </p>
                             </div>
                         </div>

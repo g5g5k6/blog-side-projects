@@ -8,6 +8,7 @@ import databaseSerice from "../../appwrite/database.js"
 import storageSerice from "../../appwrite/storage.js"
 import {useSelector } from "react-redux"
 import { useNavigate} from "react-router-dom"
+import { useTranslation } from '../../hooks/useTranslation'
 
 function PostForm({post}) {
     const {register, handleSubmit, watch, setValue, control, getValues} = useForm({
@@ -26,6 +27,7 @@ function PostForm({post}) {
     const navigate = useNavigate()
     const userData =useSelector((state) => state.auth.userData)
     const auth = useSelector(state => state.auth);
+    const { t } = useTranslation();
 
     const submit = useCallback(async(data) => {
         setIsSubmitting(true);
@@ -119,7 +121,10 @@ function PostForm({post}) {
         status: post?.status || "active",
     }), [post]);
 
-    const statusOptions = useMemo(() => ["active", "inactive"], []);
+    const statusOptions = useMemo(() => [
+        { value: "active", label: t('posts.active') },
+        { value: "inactive", label: t('posts.inactive') }
+    ], [t]);
     return (
         <form onSubmit={handleSubmit(submit)}
         className="flex flex-wrap"
@@ -133,14 +138,14 @@ function PostForm({post}) {
             )}
             <div  className="w-2/3 px-2">
                 <Input 
-                label="Title"
-                placeholder="Title"
+                label={t('posts.title')}
+                placeholder={t('posts.title')}
                 className="mb-4"
                 {...register("title", {required: true})}
                 />
                 <Input 
-                label="Slug :"
-                placeholder="Slug"
+                label={`${t('posts.slug')} :`}
+                placeholder={t('posts.slug')}
                 className="mb-4"
                 {...register("slug", {required: true})}
                 onInput={(e) => {
@@ -148,7 +153,7 @@ function PostForm({post}) {
                 }}
                 />
                 <RTE
-                label="Content: "
+                label={`${t('posts.content')}: `}
                 name="content"
                 control={control}
                 defaultValue={getValues("content")}
@@ -156,7 +161,7 @@ function PostForm({post}) {
             </div>
             <div className="1/3 px-2">
                 <Input
-                label="Featured Image"
+                label={t('posts.featuredImage')}
                 type="file"
                 className="mb-4"
                 accept="image/png, image/jpg, image/jpeg"
@@ -171,7 +176,7 @@ function PostForm({post}) {
                 )}
                 <Select
                 options={statusOptions}
-                label="Status"
+                label={t('posts.status')}
                 className="mb-4"
                 {...register("status", {required: true})}
                 />
@@ -180,7 +185,7 @@ function PostForm({post}) {
                 bgColor={post ? "bg-green-500": undefined}
                 className="w-full"
                 disabled={isSubmitting}
-                >{isSubmitting ? "Saving..." : (post ? "Update": "Submit")}</Button>
+                >{isSubmitting ? t('posts.saving') : (post ? t('posts.update'): t('posts.submit'))}</Button>
             </div>
         </form>
     )

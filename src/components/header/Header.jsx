@@ -3,36 +3,39 @@ import Container from "../container/Container"
 import Logo from "../Logo"
 import {Link} from "react-router-dom"
 import LogoutBtn from "./LogoutButton"
+import LanguageToggle from "../LanguageToggle"
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { useTranslation } from '../../hooks/useTranslation'
 
 function Header() {
     const authStatus = useSelector((state) => state.auth.status)
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     const navItems = [
         {
-            name:"Home",
+            name: t('nav.home'),
             slug:"/",
             active:true
         },
         {
-            name:"Login",
+            name: t('nav.login'),
             slug:"/login",
             active:!authStatus
         },
         {
-            name:"Signup",
+            name: t('nav.signup'),
             slug:"/signup",
             active:!authStatus
         },
         {
-            name:"All Posts",
+            name: t('nav.allPosts'),
             slug:"/all-posts",
             active:authStatus
         },
         {
-            name:"Add Post",
+            name: t('nav.addPost'),
             slug:"/add-post",
             active:authStatus
         },
@@ -68,6 +71,9 @@ function Header() {
                             </li>
                         )
                         }
+                        <li className="ml-2">
+                            <LanguageToggle />
+                        </li>
                     </ul>
                 </nav>
             </Container>

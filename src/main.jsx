@@ -5,6 +5,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom"
 import { Provider } from 'react-redux'
 import store from './store/index.js'
 import ReactDOM from 'react-dom/client'
+import { LanguageProvider } from './contexts/LanguageContext.jsx'
 
 import Home from "./pages/Home.jsx"
 import Login from "./pages/Login.jsx"
@@ -77,7 +78,9 @@ const router = createBrowserRouter([{
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <LanguageProvider>
+        <RouterProvider router={router} />
+      </LanguageProvider>
     </Provider>
   </React.StrictMode>,
 )

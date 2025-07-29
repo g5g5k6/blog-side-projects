@@ -24,12 +24,18 @@ function Select({
              focus:bg-gray-50 duration-200 border border-gray-200 w-full ${className}`}
             >
             {
-            options.map((option) => (
-                <option
-                key={option} 
-                value={option}
-                >{option}</option>
-                ))
+            options.map((option) => {
+                const isObject = typeof option === 'object';
+                const value = isObject ? option.value : option;
+                const label = isObject ? option.label : option;
+                
+                return (
+                    <option
+                    key={value} 
+                    value={value}
+                    >{label}</option>
+                );
+            })
             }
             </select>
         </div>

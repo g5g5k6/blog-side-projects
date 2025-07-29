@@ -31,7 +31,7 @@ export class AuthService{
             return await this.account.createEmailPasswordSession(email, password)
         } catch (error) {
             console.log("Appwrite service :: login:: ", error);
-            throw error
+            throw getFriendlyErrorMessage(error)
         }
     }
 

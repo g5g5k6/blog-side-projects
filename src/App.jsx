@@ -8,6 +8,7 @@ import { login, logout } from "./store/authSlice";
 import Header from "./components/header/Header"
 import Footer from "./components/footer/Footer"
 import ErrorBoundary from "./components/ErrorBoundary"
+import ConfigDebug from "./components/ConfigDebug"
 import authService from './appwrite/auth'
 import Logo from "./components/Logo"
 
@@ -41,6 +42,7 @@ function App() {
           <Footer />
         </div>
       </div>
+      <ConfigDebug />
     </ErrorBoundary>
   ) : null;
 }
