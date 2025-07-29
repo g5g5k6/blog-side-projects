@@ -21,9 +21,11 @@ export class DatabaseService {
 
     async getPosts(queries = [Query.equal("status", "active")]){
         try {
-            return await this.databases.getDocument(conf.appwriteDatabaseId, 
-                conf.appwriteCollectionId, queries
-                )
+            return await this.databases.listDocuments(
+                conf.appwriteDatabaseId, 
+                conf.appwriteCollectionId, 
+                queries
+            )
         } catch (error) {
             console.log("Appwrite service :: getPosts() :: ", error);
             return false
@@ -32,7 +34,7 @@ export class DatabaseService {
 
     async createPost({title, slug, content, featuredImage, status, userId}){
         try {
-            await this.databases.createDocument(
+            return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug,
@@ -40,7 +42,6 @@ export class DatabaseService {
                     title, content, featuredImage, status, userId
                 }
             )
-            return true
         } catch (error) {
             console.log("Appwrite service :: createPost() :: ", error);
             return false

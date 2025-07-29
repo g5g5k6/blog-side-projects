@@ -1,10 +1,6 @@
 import conf from "../config/config";
 import { Client, Account, ID } from "appwrite";
 import  getFriendlyErrorMessage  from "./errorHandler"
-
-console.log(import.meta.env)
-console.log(conf.appwriteUrl);
-console.log("appwriteUrl:", import.meta.env.VITE_APPWRITE_URL);
 export class AuthService{
     client = new Client();
     account;
@@ -15,8 +11,6 @@ export class AuthService{
     }
 
     async createAccount({email, password, name}){
-        console.log("email:", email)
-        console.log("password:", password)
         try {
             const userAccount =await this.account.create(ID.unique(), email, password, name)
             if (userAccount){
@@ -51,7 +45,7 @@ export class AuthService{
     }
     async logout(){
         try {
-            return await account.deleteSession("current");
+            return await this.account.deleteSession("current");
         } catch (error) {
             console.log("Appwrite service :: logout():: deleteSession", error);
         }

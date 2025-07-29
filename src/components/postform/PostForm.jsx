@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useState, useMemo} from "react";
 import {useForm} from "react-hook-form"
 import Button from "../Button"
 import Input from "../Input"
@@ -20,37 +20,78 @@ function PostForm({post}) {
 
     })
     
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState("");
+    
     const navigate = useNavigate()
     const userData =useSelector((state) => state.auth.userData)
     const auth = useSelector(state => state.auth);
 
-    const submit = async(data) => {
-        if (post) {
-            const file = data.image[0] ? await storageSerice.uploadFile(data.image[0]) : null
-            if (file) {
-                    storageSerice.deleteFile(post.featuredImage)
-                } 
-            const dbPost = await databaseSerice.updatePost(post.$id, {
-                ...data,
-                featuredImage: file ? file.$id : undefined 
-            })
-            if (dbPost) {
-                navigate(`/post/${dbPost.$id}`)
-            }
-        } else {
-            const file = await storageSerice.uploadFile(data.image[0])
-            if (file) {
-                const fileId = file.$id
-                data.featuredImage = fileId
-                console.log('userData:', userData,file);
-                const dbPost = await databaseSerice.createPost({...data, userId: userData.$id})
-
+    const submit = useCallback(async(data) => {
+        setIsSubmitting(true);
+        setError("");
+        
+        try {
+            if (post) {
+                // Update existing post
+                let file = null;
+                if (data.image[0]) {
+                    try {
+                        file = await storageSerice.uploadFile(data.image[0]);
+                        if (file && post.featuredImage) {
+                            await storageSerice.deleteFile(post.featuredImage);
+                        }
+                    } catch (uploadError) {
+                        throw new Error("Failed to upload new image. Please try again.");
+                    }
+                }
+                
+                const dbPost = await databaseSerice.updatePost(post.$id, {
+                    ...data,
+                    featuredImage: file ? file.$id : post.featuredImage
+                });
+                
                 if (dbPost) {
-                    navigate(`/post/${dbPost.$id}`)
+                    navigate(`/post/${dbPost.$id}`);
+                } else {
+                    throw new Error("Failed to update post. Please try again.");
+                }
+            } else {
+                // Create new post
+                if (!data.image[0]) {
+                    throw new Error("Please select an image for your post.");
+                }
+                
+                let file;
+                try {
+                    file = await storageSerice.uploadFile(data.image[0]);
+                } catch (uploadError) {
+                    throw new Error("Failed to upload image. Please check file size and format.");
+                }
+                
+                if (file) {
+                    data.featuredImage = file.$id;
+                    const dbPost = await databaseSerice.createPost({
+                        ...data, 
+                        userId: userData.$id
+                    });
+
+                    if (dbPost) {
+                        navigate(`/post/${dbPost.$id}`);
+                    } else {
+                        // Clean up uploaded file if post creation fails
+                        await storageSerice.deleteFile(file.$id);
+                        throw new Error("Failed to create post. Please try again.");
+                    }
                 }
             }
+        } catch (error) {
+            console.error("Post submission error:", error);
+            setError(error.message || "An unexpected error occurred. Please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
-    }
+    }, [post, userData, navigate]);
 
     const slugTransform = useCallback((value) => {
         if (value && typeof value === "string")
@@ -62,17 +103,34 @@ function PostForm({post}) {
     }, [])
 
     React.useEffect(() => {
-        watch((value, {name}) => {
+        const subscription = watch((value, {name}) => {
             if (name==="title") {
                setValue("slug", slugTransform(value.title), 
                {shouldValidate: true}) 
             }
-        })
-    }, [watch,slugTransform,setValue])
+        });
+        return () => subscription.unsubscribe();
+    }, [watch, slugTransform, setValue]);
+
+    const defaultValues = useMemo(() => ({
+        title: post?.title || "",
+        slug: post?.slug || "",
+        context: post?.context || "",
+        status: post?.status || "active",
+    }), [post]);
+
+    const statusOptions = useMemo(() => ["active", "inactive"], []);
     return (
         <form onSubmit={handleSubmit(submit)}
         className="flex flex-wrap"
         >
+            {error && (
+                <div className="w-full mb-4 px-2">
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        {error}
+                    </div>
+                </div>
+            )}
             <div  className="w-2/3 px-2">
                 <Input 
                 label="Title"
@@ -106,13 +164,13 @@ function PostForm({post}) {
                 />
                 {post && (
                     <div className="w-full mb-4">
-                        <img src={appwriteSerice.getFilePreview(post.featuredImage)} alt={post.title}
+                        <img src={storageSerice.getFilePreview(post.featuredImage)} alt={post.title}
                         className="rounded-lg"
                         />
                     </div>
                 )}
                 <Select
-                options={["active", "inactive"]}
+                options={statusOptions}
                 label="Status"
                 className="mb-4"
                 {...register("status", {required: true})}
@@ -121,7 +179,8 @@ function PostForm({post}) {
                 type="submit"
                 bgColor={post ? "bg-green-500": undefined}
                 className="w-full"
-                >{post ? "Update": "Submit"}</Button>
+                disabled={isSubmitting}
+                >{isSubmitting ? "Saving..." : (post ? "Update": "Submit")}</Button>
             </div>
         </form>
     )
